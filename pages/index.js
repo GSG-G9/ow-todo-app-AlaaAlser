@@ -1,65 +1,104 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import React, {useState} from 'react';
+import List from '../components/List';
+import NewForm from '../components/NewForm';
+import EditForm from '../components/EditForm';
 
-export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+const IndexPage = () => {
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+const [newTask,setNewTask] = useState("")	
+const [todos,setTodos] = useState([])
+const [editMode,setEditMode] = useState(false)
+const [editTodos,setEditTodos] = useState([])
+const [editTodosOriginal,setEditTodosOriginal] = useState("")
+const [completed,setCompleted] = useState(false)
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+const onNewtodos = (event) => {
+	setNewTask(event.target.value);
 }
+
+
+const onNewFormSubmit = (event) => {
+		event.preventDefault();
+		setTodos([newTask,...todos ]);
+		setNewTask("")
+	}
+
+const	onDelete = (deleteItem) => {
+		const deleteTask =  todos.filter( item => item !== deleteItem );
+		setTodos(deleteTask)
+	}
+
+	const onComplete = (todo) => {
+		setTodos(
+			todos.map((item)=> {
+				if(item === todo){
+					return([...todo])
+				}
+				return item
+			})
+		)
+	}
+	
+	const	onEditFormCancel = (event) => {
+		event.preventDefault();
+		setEditMode(false);
+	}
+
+
+const	onEditTodos = (event) => {
+	setEditTodos(event.target.value)
+	}
+
+	const	onEditFormSubmit = (event) => {
+		event.preventDefault();
+		const newItems = todos.map(todo => {
+			if(todo === editTodosOriginal) {
+				todo = editTodos;
+	 	setEditMode(false);
+}
+			return todo;
+		});
+		setTodos(newItems)
+	}
+
+const	onEdit = (editItem) => {
+	setEditTodos(editItem);
+	setEditTodosOriginal(editItem)
+	setEditMode(true);
+
+	}
+
+
+
+	
+	return (
+            <div>
+
+                <style jsx>{`
+					header {
+						background: #FBC13F;
+						margin: -10px -10px 0;
+						padding: 10px;
+					}
+					
+					header h1 {
+						margin: 0;
+						padding: 0;
+					}
+                `}</style>
+
+				<header>
+	                <h1>To-Do App</h1>
+				</header>
+
+				{ editMode ?( <EditForm onChange={onEditTodos} onSubmit={onEditFormSubmit} onCancel={onEditFormCancel} value={editTodos} /> ) :( 			<div>
+                <NewForm onChange={onNewtodos} onSubmit={onNewFormSubmit} value={newTask} />
+                <List items={todos} onDelete={onDelete} onEdit={onEdit} onComplete={onComplete}  />
+			</div>) }
+            </div>
+        );
+}
+
+export default IndexPage;
