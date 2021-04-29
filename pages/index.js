@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import List from '../components/List';
 import NewForm from '../components/NewForm';
 import EditForm from '../components/EditForm';
+import styles from '../styles/Home.module.css';
 
 const IndexPage = () => {
   const [newTask, setNewTask] = useState('');
@@ -26,15 +27,8 @@ const IndexPage = () => {
     setTodos(deleteTask);
   };
 
-  const onComplete = (todo) => {
-    setTodos(
-      todos.map((item) => {
-        if (item === todo) {
-          return [...todo];
-        }
-        return item;
-      })
-    );
+  const onComplete = () => {
+    setCompleted(true);
   };
 
   const onEditFormCancel = (event) => {
@@ -64,47 +58,38 @@ const IndexPage = () => {
     setEditMode(true);
   };
 
+
   return (
-    <div>
-      <style jsx>{`
-        header {
-          background: #fbc13f;
-          margin: -10px -10px 0;
-          padding: 10px;
-        }
+    <div className={styles.container}>
+      <div className={styles.wrapper}>
+        <header className={styles.header}>
+          <h1>To-Do List</h1>
+        </header>
 
-        header h1 {
-          margin: 0;
-          padding: 0;
-        }
-      `}</style>
-
-      <header>
-        <h1>To-Do List</h1>
-      </header>
-
-      {editMode ? (
-        <EditForm
-          onChange={onEditTodos}
-          onSubmit={onEditFormSubmit}
-          onCancel={onEditFormCancel}
-          value={editTodos}
-        />
-      ) : (
-        <div>
-          <NewForm
-            onChange={onNewtodos}
-            onSubmit={onNewFormSubmit}
-            value={newTask}
+        {editMode ? (
+          <EditForm
+            onChange={onEditTodos}
+            onSubmit={onEditFormSubmit}
+            onCancel={onEditFormCancel}
+            value={editTodos}
           />
-          <List
-            items={todos}
-            onDelete={onDelete}
-            onEdit={onEdit}
-            onComplete={onComplete}
-          />
-        </div>
-      )}
+        ) : (
+          <div>
+            <NewForm
+              onChange={onNewtodos}
+              onSubmit={onNewFormSubmit}
+              value={newTask}
+            />
+            <List
+              items={todos}
+              onDelete={onDelete}
+              onEdit={onEdit}
+              onComplete={onComplete}
+              complete={completed}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

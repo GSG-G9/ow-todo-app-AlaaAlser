@@ -1,23 +1,17 @@
 import DeleteComponent from './DeleteComponent';
 import EditComponent from './EditComponent';
 import CompleteComponent from './CompleteComponent'
+import styles from '../styles/Home.module.css';
 
-const ListItem = (props) => {
-    let { item = "", onDelete, onEdit, onComplete } = props;
+
+const ListItem = ({item = "", onDelete, onEdit, onComplete,complete}) => {
 
     return (
-        <li>
-            <style jsx>{`
-               li {
-                    background: white;
-                    margin: 10px 0;
-                    padding: 10px;
-                }
-            `}</style>
+        <li className={`${styles.listItmes} ${complete?styles.complete:""}`}>
+            <CompleteComponent item={item} onComplete={onComplete} complete={complete} />
 			{item}
-			<DeleteComponent item={item} onDelete={onDelete} />
 			<EditComponent item={item} onEdit={onEdit} />
-            <CompleteComponent item={item} onComplete={onComplete} />
+			<DeleteComponent item={item} onDelete={onDelete} />
 		</li>
     );
 };

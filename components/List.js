@@ -1,21 +1,21 @@
 import List from '../components/ListItem';
+import styles from '../styles/Home.module.css';
 
-const ListComponent = (props) => {
-	const { items, onDelete, onEdit, onComplete } = props;
-
-    return (
-        <ul>
-                <style jsx>{`
-                    ul {
-                        list-style: none;
-                        margin: 0;
-                        padding: 0;
-                    }
-               `}</style>
-
-            { items.map(item => <List key={item} item={item} onDelete={onDelete} onEdit={onEdit} onComplete={onComplete}  />) }
-        </ul>
-    );
+const ListComponent = ({ items, onDelete, onEdit, onComplete,complete }) => {
+  return (
+    <ul className={styles.list}>
+      {items.map((item) => (
+        <List
+          key={item}
+          item={item}
+          onDelete={onDelete}
+          onEdit={onEdit}
+          onComplete={onComplete}
+          complete={complete}
+        />
+      ))}
+    </ul>
+  );
 };
 
 export default ListComponent;

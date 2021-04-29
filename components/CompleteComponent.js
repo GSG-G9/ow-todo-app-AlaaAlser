@@ -1,16 +1,18 @@
-const CompleteComponent = (props) => {
-    const { item, onComplete } = props;
+import styles from '../styles/Home.module.css';
 
-    return (
-        <a onTouchTap={() => {event.preventDefault(); onComplete(item) }}>
-            <style jsx>{`
-                float: right;
-                margin-left: 10px;
-            `}</style>
-   <input type="checkbox"
-      color="default"
-    />        </a>
-    );
+const CompleteComponent = ({ item, onComplete, complete }) => {
+  return (
+    <div className={styles.buttoncomplete}>
+      <input
+        onChange={(event) => {
+          event.preventDefault();
+          onComplete(item);
+        }}
+        type="checkbox"
+        color="default"
+      />
+    </div>
+  );
 };
 
 export default CompleteComponent;
